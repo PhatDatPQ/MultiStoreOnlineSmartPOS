@@ -24,10 +24,13 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.superpos.adapter.HomeModuleAdapter;
 import com.app.superpos.customers.CustomersActivity;
 import com.app.superpos.expense.ExpenseActivity;
 import com.app.superpos.login.LoginActivity;
+import com.app.superpos.model.HomeModuleGrid;
 import com.app.superpos.orders.OrdersActivity;
 import com.app.superpos.pos.PosActivity;
 import com.app.superpos.product.ProductActivity;
@@ -48,6 +51,7 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -66,7 +70,7 @@ public class HomeActivity extends BaseActivity {
     TextView txtShopName, txtSubText;
 
     private AdView adView;
-
+    RecyclerView recyViewModuleGrid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +80,10 @@ public class HomeActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.app_name);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
         getSupportActionBar().setElevation(0);
+        recyViewModuleGrid = findViewById(R.id.recycler_home_prod);
+        recyViewModuleGrid.setAdapter(new HomeModuleAdapter(this, initModuleGridDate()));
 
-
-        cardCustomers = findViewById(R.id.card_customers);
+      /*  cardCustomers = findViewById(R.id.card_customers);
         cardSupplier = findViewById(R.id.card_suppliers);
         cardProducts = findViewById(R.id.card_products);
         cardPos = findViewById(R.id.card_pos);
@@ -88,7 +93,7 @@ public class HomeActivity extends BaseActivity {
         cardExpense = findViewById(R.id.card_expense);
         cardLogout = findViewById(R.id.card_logout);
         txtShopName = findViewById(R.id.txt_shop_name);
-        txtSubText = findViewById(R.id.txt_sub_text);
+        txtSubText = findViewById(R.id.txt_sub_text);*/
 
 
         sp = getSharedPreferences(Constant.SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -97,13 +102,13 @@ public class HomeActivity extends BaseActivity {
         userType = sp.getString(Constant.SP_USER_TYPE, "");
         String shopName = sp.getString(Constant.SP_SHOP_NAME, "");
         String staffName = sp.getString(Constant.SP_STAFF_NAME, "");
-        txtShopName.setText(shopName);
-        txtSubText.setText(getString(R.string.hi) + " " + staffName);
+//        txtShopName.setText(shopName);
+        //      txtSubText.setText(getString(R.string.hi) + " " + staffName);
 
 
         if (SDK_INT >= 23) //Android MarshMellow Version or above
         {
-            requestPermission();
+            //requestPermission();
 
         }
 
@@ -115,11 +120,12 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-        adView = findViewById(R.id.adview);
+        //  adView = findViewById(R.id.adview);
         AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+//        adView.loadAd(adRequest);
 
 
+/*
         cardCustomers.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, CustomersActivity.class);
             startActivity(intent);
@@ -230,7 +236,7 @@ public class HomeActivity extends BaseActivity {
 
 
         });
-
+*/
 
 
     }
@@ -337,4 +343,19 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+    private ArrayList<HomeModuleGrid> initModuleGridDate() {
+
+        ArrayList<HomeModuleGrid> lstModules = new ArrayList<>();
+        lstModules.add(new HomeModuleGrid(R.drawable.customers, R.string.customers));
+        lstModules.add(new HomeModuleGrid(R.drawable.suppliers, R.string.suppliers));
+        lstModules.add(new HomeModuleGrid(R.drawable.ic_products, R.string.products));
+        lstModules.add(new HomeModuleGrid(R.drawable.ic_pos, R.string.pos));
+        lstModules.add(new HomeModuleGrid(R.drawable.expense, R.string.expense));
+        lstModules.add(new HomeModuleGrid(R.drawable.allorders, R.string.all_orders));
+        lstModules.add(new HomeModuleGrid(R.drawable.report, R.string.report));
+        lstModules.add(new HomeModuleGrid(R.drawable.analytics, R.string.analytics));
+        lstModules.add(new HomeModuleGrid(R.drawable.ic_settings, R.string.settings));
+
+        return lstModules;
+    }
 }

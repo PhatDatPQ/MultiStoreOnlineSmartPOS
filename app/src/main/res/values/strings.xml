@@ -245,4 +245,8 @@
     <string name="hi">Hi</string>
     <string name="product_buy_price">Product Buy Price</string>
     <string name="buy_price">Buy Price</string>
+    <string name="send">Send</string>
+    <string name="received">Received</string>
+    <string name="analytics">Analytics</string>
+    <string name="settings">Settings</string>
 </resources>

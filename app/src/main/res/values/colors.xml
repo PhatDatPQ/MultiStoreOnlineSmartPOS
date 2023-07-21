@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="bg_skyblue">#357DEA</color>
+    <color name="bg_green">#6BD207</color>
     <color name="colorPrimary">#43a047</color>
     <color name="colorPrimaryDark">#43a047</color>
     <color name="colorAccent">#43a047</color>
