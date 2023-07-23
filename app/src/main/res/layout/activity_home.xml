@@ -123,15 +123,23 @@
     <LinearLayout
         android:id="@+id/layout_grafs"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         android:layout_margin="10dp"
-        android:background="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_received">
+        app:layout_constraintTop_toBottomOf="@+id/layout_received"
+        app:layout_constraintBottom_toTopOf="@+id/img__home_prod">
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barchart"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.github.mikephil.charting.charts.BarChart>
 
     </LinearLayout>
     <ImageView
+        android:id="@+id/img__home_prod"
         android:background="@drawable/home_grid_module_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.superpos.HomeActivity;
 import com.app.superpos.R;
+import com.app.superpos.interfaces.IHomeGridClickListener;
 import com.app.superpos.model.HomeModuleGrid;
 
 import java.util.ArrayList;
@@ -21,10 +23,12 @@ public class HomeModuleAdapter extends RecyclerView.Adapter<HomeModuleAdapter.Ho
 
     public ArrayList<HomeModuleGrid> listOfModules;
     Context context;
+    IHomeGridClickListener listener;
 
-    public HomeModuleAdapter(Context context, ArrayList<HomeModuleGrid> listOfModules) {
+    public HomeModuleAdapter(Context context, ArrayList<HomeModuleGrid> listOfModules, IHomeGridClickListener listener) {
         this.context = context;
         this.listOfModules = listOfModules;
+        this.listener = listener;
     }
 
     @NonNull
@@ -40,9 +44,15 @@ public class HomeModuleAdapter extends RecyclerView.Adapter<HomeModuleAdapter.Ho
 
         HomeModuleGrid hmd = listOfModules.get(position);
 
-      //  holder.moduleImage.setImageDrawable(context.getDrawable(hmd.moduleImage));
+        holder.moduleImage.setImageDrawable(context.getDrawable(hmd.moduleImage));
 
         holder.moduletile.setText(context.getText(hmd.moduleTitle));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClickListener(hmd);
+            }
+        });
     }
 
     @Override

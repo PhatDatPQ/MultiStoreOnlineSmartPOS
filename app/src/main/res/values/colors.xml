@@ -24,5 +24,6 @@
     <color name="transparent_black">#88000000</color>
 
     <color name="red">#E32626</color>
+    <color name="black_hex">#272727</color>
 
 </resources>
