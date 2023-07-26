@@ -30,6 +30,7 @@ public class EditSuppliersActivity extends BaseActivity {
     EditText etxtSuppliersName, etxtSuppliersContactPerson, etxtSuppliersAddress, etxtSuppliersCell, etxtSuppliersEmail;
     TextView txtEditSuppliers, txtUpdateSuppliers;
     ProgressDialog loading;
+    boolean IsEditSuppliers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class EditSuppliersActivity extends BaseActivity {
         String getSuppliersCell = getIntent().getExtras().getString("suppliers_cell");
         String getSuppliersEmail = getIntent().getExtras().getString("suppliers_email");
         String getSuppliersAddress = getIntent().getExtras().getString("suppliers_address");
+        IsEditSuppliers = getIntent().getExtras().getBoolean(Constant.SUPPLIERS_ISEDIT);
 
 
         etxtSuppliersName.setText(getSuppliersName);
@@ -64,14 +66,32 @@ public class EditSuppliersActivity extends BaseActivity {
         etxtSuppliersEmail.setText(getSuppliersEmail);
         etxtSuppliersAddress.setText(getSuppliersAddress);
 
-        etxtSuppliersName.setEnabled(false);
-        etxtSuppliersContactPerson.setEnabled(false);
-        etxtSuppliersCell.setEnabled(false);
-        etxtSuppliersEmail.setEnabled(false);
-        etxtSuppliersAddress.setEnabled(false);
+        if (IsEditSuppliers){
+            etxtSuppliersName.setEnabled(true);
+            etxtSuppliersContactPerson.setEnabled(true);
+            etxtSuppliersCell.setEnabled(true);
+            etxtSuppliersEmail.setEnabled(true);
+            etxtSuppliersAddress.setEnabled(true);
+            etxtSuppliersName.setTextColor(Color.RED);
+            etxtSuppliersContactPerson.setTextColor(Color.RED);
+            etxtSuppliersCell.setTextColor(Color.RED);
+            etxtSuppliersEmail.setTextColor(Color.RED);
+            etxtSuppliersAddress.setTextColor(Color.RED);
 
 
-        txtUpdateSuppliers.setVisibility(View.INVISIBLE);
+            txtUpdateSuppliers.setVisibility(View.VISIBLE);
+            txtEditSuppliers.setVisibility(View.GONE);
+        }else {
+            etxtSuppliersName.setEnabled(false);
+            etxtSuppliersContactPerson.setEnabled(false);
+            etxtSuppliersCell.setEnabled(false);
+            etxtSuppliersEmail.setEnabled(false);
+            etxtSuppliersAddress.setEnabled(false);
+            txtUpdateSuppliers.setVisibility(View.GONE);
+            txtEditSuppliers.setVisibility(View.VISIBLE);
+
+        }
+
 
         txtEditSuppliers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,17 +160,16 @@ public class EditSuppliersActivity extends BaseActivity {
     }
 
 
+    private void updateSupplier(String suppliersId, String name, String contactPerson, String cell, String email, String address) {
 
-    private void updateSupplier(String suppliersId,String name,String contactPerson,String cell,String email, String address) {
 
-
-        loading=new ProgressDialog(this);
+        loading = new ProgressDialog(this);
         loading.setCancelable(false);
         loading.setMessage(getString(R.string.please_wait));
         loading.show();
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
-        Call<Suppliers> call = apiInterface.updateSuppliers(suppliersId,name,contactPerson,cell,email,address);
+        Call<Suppliers> call = apiInterface.updateSuppliers(suppliersId, name, contactPerson, cell, email, address);
         call.enqueue(new Callback<Suppliers>() {
             @Override
             public void onResponse(@NonNull Call<Suppliers> call, @NonNull Response<Suppliers> response) {
@@ -168,17 +187,14 @@ public class EditSuppliersActivity extends BaseActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
 
-                    }
-                    else if (value.equals(Constant.KEY_FAILURE)) {
+                    } else if (value.equals(Constant.KEY_FAILURE)) {
 
                         loading.dismiss();
 
                         Toasty.error(EditSuppliersActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                         finish();
 
-                    }
-
-                    else {
+                    } else {
                         loading.dismiss();
                         Toasty.error(EditSuppliersActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                     }
@@ -193,8 +209,6 @@ public class EditSuppliersActivity extends BaseActivity {
             }
         });
     }
-
-
 
 
     //for back button

@@ -58,6 +58,8 @@ public class PosActivity extends BaseActivity {
     DatabaseAccess databaseAccess;
     FloatingActionButton fabAdd;
     LinearLayout liner_no_products;
+    SharedPreferences sp;
+    String shopID, ownerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,45 +86,21 @@ public class PosActivity extends BaseActivity {
 
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
 
-        SharedPreferences sp = getSharedPreferences(Constant.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        String shopID = sp.getString(Constant.SP_SHOP_ID, "");
-        String ownerId = sp.getString(Constant.SP_OWNER_ID, "");
-
-
+        sp = getSharedPreferences(Constant.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        shopID = sp.getString(Constant.SP_SHOP_ID, "");
+        ownerId = sp.getString(Constant.SP_OWNER_ID, "");
         imgScanner.setOnClickListener(v -> {
             Intent intent = new Intent(PosActivity.this, ScannerActivity.class);
             startActivity(intent);
         });
-
         imgNoProduct.setVisibility(View.GONE);
         txtNoProducts.setVisibility(View.GONE);
-
-        getProductCategory(shopID, ownerId);
-
-        // set a GridLayoutManager with default vertical orientation and 3 number of columns
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
-        recyclerView.setLayoutManager(gridLayoutManager); // set LayoutManager to RecyclerView
-        recyclerView.setHasFixedSize(true);
-
-        //Load data from server
-        getProductsData("", shopID, ownerId);
-
         txtReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getProductsData("", shopID, ownerId);
             }
         });
-
-
-        // set a GridLayoutManager with default vertical orientation and 3 number of columns
-        LinearLayoutManager linerLayoutManager = new LinearLayoutManager(PosActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        categoryRecyclerView.setLayoutManager(linerLayoutManager); // set LayoutManager to RecyclerView
-
-
-        categoryRecyclerView.setHasFixedSize(true);
-
-
         etxtSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -152,18 +130,6 @@ public class PosActivity extends BaseActivity {
 
 
         });
-
-
-        databaseAccess.open();
-        int count = databaseAccess.getCartItemCount();
-        if (count == 0) {
-            txtCount.setVisibility(View.INVISIBLE);
-        } else {
-            txtCount.setVisibility(View.VISIBLE);
-            txtCount.setText(String.valueOf(count));
-        }
-
-
         imgCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,8 +138,6 @@ public class PosActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
-
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,8 +149,7 @@ public class PosActivity extends BaseActivity {
             Intent intent = new Intent(PosActivity.this, AddProductActivity.class);
             startActivity(intent);
         });
-
-
+        refreshProductList();
     }
 
 
@@ -223,7 +186,7 @@ public class PosActivity extends BaseActivity {
 
                     } else {
 
-                        categoryAdapter = new ProductCategoryAdapter(PosActivity.this, productCategory, recyclerView,liner_no_products, mShimmerViewContainer);
+                        categoryAdapter = new ProductCategoryAdapter(PosActivity.this, productCategory, recyclerView, liner_no_products, mShimmerViewContainer);
 
                         categoryRecyclerView.setAdapter(categoryAdapter);
 
@@ -300,9 +263,23 @@ public class PosActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        refreshProductList();
+    }
 
 
+  public void refreshProductList() {
         databaseAccess.open();
+        getProductCategory(shopID, ownerId);
+        // set a GridLayoutManager with default vertical orientation and 3 number of columns
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        recyclerView.setLayoutManager(gridLayoutManager); // set LayoutManager to RecyclerView
+        recyclerView.setHasFixedSize(true);
+        //Load data from server
+        getProductsData("", shopID, ownerId);
+        // set a GridLayoutManager with default vertical orientation and 3 number of columns
+        LinearLayoutManager linerLayoutManager = new LinearLayoutManager(PosActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        categoryRecyclerView.setLayoutManager(linerLayoutManager); // set LayoutManager to RecyclerView
+        categoryRecyclerView.setHasFixedSize(true);
         int count = databaseAccess.getCartItemCount();
         if (count == 0) {
             txtCount.setVisibility(View.INVISIBLE);

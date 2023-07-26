@@ -37,12 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SuppliersActivity extends BaseActivity {
-
-
-
-
     private RecyclerView recyclerView;
-
     ImageView imgNoProduct;
     EditText etxtSearch;
     FloatingActionButton fabAdd;
@@ -84,14 +79,11 @@ public class SuppliersActivity extends BaseActivity {
         // set a GridLayoutManager with default vertical orientation and 3 number of columns
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
-
-
         recyclerView.setHasFixedSize(true);
         Utils utils=new Utils();
 
         //swipe refresh listeners
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
-
             if (utils.isNetworkAvailable(SuppliersActivity.this))
             {
                 getSuppliersData("",shopID,ownerId);
@@ -100,8 +92,6 @@ public class SuppliersActivity extends BaseActivity {
             {
                 Toasty.error(SuppliersActivity.this, R.string.no_network_connection, Toast.LENGTH_SHORT).show();
             }
-
-
             //after shuffle id done then swife refresh is off
             mSwipeRefreshLayout.setRefreshing(false);
         });
@@ -123,11 +113,6 @@ public class SuppliersActivity extends BaseActivity {
             mShimmerViewContainer.setVisibility(View.GONE);
             Toasty.error(this, R.string.no_network_connection, Toast.LENGTH_SHORT).show();
         }
-
-
-
-
-
         etxtSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -171,12 +156,6 @@ public class SuppliersActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
-
-
     public void getSuppliersData(String searchText,String shopId,String ownerId) {
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
@@ -231,7 +210,4 @@ public class SuppliersActivity extends BaseActivity {
 
 
     }
-
-
-
 }

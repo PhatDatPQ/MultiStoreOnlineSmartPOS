@@ -90,6 +90,7 @@ public class Constant {
     public static final String SUPPLIERS_CELL="suppliers_cell";
     public static final String SUPPLIERS_EMAIL="suppliers_email";
     public static final String SUPPLIERS_ADDRESS="suppliers_address";
+    public static final String SUPPLIERS_ISEDIT="suppliers_isedit";
 
     public static final String KEY_FILE="file";
     public static final String PRODUCT_ID="product_id";

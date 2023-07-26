@@ -723,9 +723,6 @@ public class ProductCart extends BaseActivity {
 
     }
 
-
-
-
     //for back button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

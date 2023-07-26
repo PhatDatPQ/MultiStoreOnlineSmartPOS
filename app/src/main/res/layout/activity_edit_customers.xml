@@ -124,6 +124,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/edit"
+                android:visibility="gone"
                 android:textColor="#ffffff"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -142,6 +143,7 @@
                 android:fontFamily="@font/sailec_regular"
                 android:gravity="center"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:text="@string/update_information"
                 android:textColor="#ffffff"
                 android:textSize="16dp"

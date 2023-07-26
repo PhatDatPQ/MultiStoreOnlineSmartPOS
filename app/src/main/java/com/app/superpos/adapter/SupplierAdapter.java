@@ -114,6 +114,21 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.MyView
 
             }
         });
+        holder.img_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(context, EditSuppliersActivity.class);
+                i.putExtra(Constant.SUPPLIERS_ID, supplierData.get(position).getSuppliersId());
+                i.putExtra(Constant.SUPPLIERS_NAME, supplierData.get(position).getSuppliersName());
+                i.putExtra(Constant.SUPPLIERS_CONTACT_PERSON, supplierData.get(position).getSuppliersContactPerson());
+                i.putExtra(Constant.SUPPLIERS_CELL, supplierData.get(position).getSuppliersCell());
+                i.putExtra(Constant.SUPPLIERS_EMAIL, supplierData.get(position).getSuppliersEmail());
+                i.putExtra(Constant.SUPPLIERS_ADDRESS, supplierData.get(position).getSuppliersAddress());
+                i.putExtra(Constant.SUPPLIERS_ISEDIT, true);
+                context.startActivity(i);
+            }
+        });
 
     }
 
@@ -125,7 +140,7 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView txtSuppliersName, txtSupplierContactPerson, txtSupplierCell, txtSupplierEmail, txtSupplierAddress;
-        ImageView imgDelete, imgCall;
+        ImageView imgDelete, imgCall,img_edit;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -138,6 +153,7 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.MyView
 
             imgDelete = itemView.findViewById(R.id.img_delete);
             imgCall = itemView.findViewById(R.id.img_call);
+            img_edit = itemView.findViewById(R.id.img_edit);
 
 
             itemView.setOnClickListener(this);
@@ -154,6 +170,7 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.MyView
             i.putExtra(Constant.SUPPLIERS_CELL, supplierData.get(getAdapterPosition()).getSuppliersCell());
             i.putExtra(Constant.SUPPLIERS_EMAIL, supplierData.get(getAdapterPosition()).getSuppliersEmail());
             i.putExtra(Constant.SUPPLIERS_ADDRESS, supplierData.get(getAdapterPosition()).getSuppliersAddress());
+            i.putExtra(Constant.SUPPLIERS_ISEDIT, false);
             context.startActivity(i);
         }
     }

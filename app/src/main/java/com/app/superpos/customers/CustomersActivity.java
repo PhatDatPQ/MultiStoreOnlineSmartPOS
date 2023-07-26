@@ -37,9 +37,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CustomersActivity extends BaseActivity {
-
-
-
     private RecyclerView recyclerView;
     ImageView imgNoProduct;
     EditText etxtSearch;

@@ -32,6 +32,7 @@ public class EditCustomersActivity extends BaseActivity {
     EditText etxtCustomerName, etxtAddress, etxtCustomerCell, etxtCustomerEmail;
     TextView txtEditCustomer, txtUpdateInformation;
     String getCustomerId, getCustomerName, getCustomerCell, getCustomerEmail, getCustomerAddress;
+    boolean getCustomerIsEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class EditCustomersActivity extends BaseActivity {
         getCustomerCell = getIntent().getExtras().getString("customer_cell");
         getCustomerEmail = getIntent().getExtras().getString("customer_email");
         getCustomerAddress = getIntent().getExtras().getString("customer_address");
+        getCustomerIsEdit = getIntent().getExtras().getBoolean("customer_isEdit");
 
 
         etxtCustomerName.setText(getCustomerName);
@@ -63,19 +65,29 @@ public class EditCustomersActivity extends BaseActivity {
         etxtCustomerEmail.setText(getCustomerEmail);
         etxtAddress.setText(getCustomerAddress);
 
+        if (getCustomerIsEdit) {
+            etxtCustomerName.setEnabled(true);
+            etxtCustomerCell.setEnabled(true);
+            etxtCustomerEmail.setEnabled(true);
+            etxtAddress.setEnabled(true);
 
-        etxtCustomerName.setEnabled(false);
-        etxtCustomerCell.setEnabled(false);
-        etxtCustomerEmail.setEnabled(false);
-        etxtAddress.setEnabled(false);
-
-        txtUpdateInformation.setVisibility(View.INVISIBLE);
+            etxtCustomerName.setTextColor(Color.RED);
+            etxtCustomerCell.setTextColor(Color.RED);
+            etxtCustomerEmail.setTextColor(Color.RED);
+            etxtAddress.setTextColor(Color.RED);
+        } else {
+            etxtCustomerName.setEnabled(false);
+            etxtCustomerCell.setEnabled(false);
+            etxtCustomerEmail.setEnabled(false);
+            etxtAddress.setEnabled(false);
+            txtUpdateInformation.setVisibility(View.GONE);
+            txtEditCustomer.setVisibility(View.VISIBLE);
+        }
 
 
         txtEditCustomer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 etxtCustomerName.setEnabled(true);
                 etxtCustomerCell.setEnabled(true);
                 etxtCustomerEmail.setEnabled(true);
@@ -85,10 +97,6 @@ public class EditCustomersActivity extends BaseActivity {
                 etxtCustomerCell.setTextColor(Color.RED);
                 etxtCustomerEmail.setTextColor(Color.RED);
                 etxtAddress.setTextColor(Color.RED);
-                txtUpdateInformation.setVisibility(View.VISIBLE);
-
-                txtEditCustomer.setVisibility(View.GONE);
-
             }
         });
 
@@ -130,17 +138,16 @@ public class EditCustomersActivity extends BaseActivity {
     }
 
 
+    private void updateCustomer(String id, String name, String cell, String email, String address) {
 
-    private void updateCustomer(String id,String name,String cell,String email, String address) {
-
-        loading=new ProgressDialog(this);
+        loading = new ProgressDialog(this);
         loading.setCancelable(false);
         loading.setMessage(getString(R.string.please_wait));
         loading.show();
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
-        Call<Customer> call = apiInterface.updateCustomers(id,name,cell,email,address);
+        Call<Customer> call = apiInterface.updateCustomers(id, name, cell, email, address);
         call.enqueue(new Callback<Customer>() {
             @Override
             public void onResponse(@NonNull Call<Customer> call, @NonNull Response<Customer> response) {
@@ -158,17 +165,14 @@ public class EditCustomersActivity extends BaseActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
 
-                    }
-                    else if (value.equals(Constant.KEY_FAILURE)) {
+                    } else if (value.equals(Constant.KEY_FAILURE)) {
 
                         loading.dismiss();
 
                         Toasty.error(EditCustomersActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                         finish();
 
-                    }
-
-                    else {
+                    } else {
                         loading.dismiss();
                         Toasty.error(EditCustomersActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                     }

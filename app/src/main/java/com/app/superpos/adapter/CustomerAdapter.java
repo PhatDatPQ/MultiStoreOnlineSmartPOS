@@ -32,8 +32,6 @@ import retrofit2.Response;
 import static com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype.Slidetop;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyViewHolder> {
-
-
     private List<Customer> customerData;
     private Context context;
     Utils utils;
@@ -42,10 +40,9 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
     public CustomerAdapter(Context context, List<Customer> customerData) {
         this.context = context;
         this.customerData = customerData;
-        utils=new Utils();
+        utils = new Utils();
 
     }
-
 
     @NonNull
     @Override
@@ -102,9 +99,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
                                     deleteCustomer(customer_id);
                                     customerData.remove(holder.getAdapterPosition());
                                     dialogBuilder.dismiss();
-                                }
-                                else
-                                {
+                                } else {
                                     dialogBuilder.dismiss();
                                     Toasty.error(context, R.string.no_network_connection, Toast.LENGTH_SHORT).show();
                                 }
@@ -122,6 +117,19 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
 
             }
         });
+        holder.img_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, EditCustomersActivity.class);
+                i.putExtra("customer_id", customer_id);
+                i.putExtra("customer_name", name);
+                i.putExtra("customer_cell", cell);
+                i.putExtra("customer_email", email);
+                i.putExtra("customer_address", address);
+                i.putExtra("customer_isEdit", true);
+                context.startActivity(i);
+            }
+        });
 
     }
 
@@ -133,7 +141,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView txtCustomerName, txtCell, txtEmail, txtAddress;
-        ImageView imgDelete, imgCall;
+        ImageView imgDelete, imgCall,img_edit;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -145,6 +153,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
 
             imgDelete = itemView.findViewById(R.id.img_delete);
             imgCall = itemView.findViewById(R.id.img_call);
+            img_edit = itemView.findViewById(R.id.img_edit);
 
 
             itemView.setOnClickListener(this);
@@ -159,6 +168,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
             i.putExtra("customer_cell", customerData.get(getAdapterPosition()).getCustomerCell());
             i.putExtra("customer_email", customerData.get(getAdapterPosition()).getCustomerEmail());
             i.putExtra("customer_address", customerData.get(getAdapterPosition()).getCustomerAddress());
+            i.putExtra("customer_isEdit", false);
             context.startActivity(i);
         }
     }
@@ -183,13 +193,9 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
                         Toasty.error(context, R.string.customer_deleted, Toast.LENGTH_SHORT).show();
                         notifyDataSetChanged();
 
-                    }
-
-                    else if (value.equals(Constant.KEY_FAILURE)){
+                    } else if (value.equals(Constant.KEY_FAILURE)) {
                         Toasty.error(context, R.string.error, Toast.LENGTH_SHORT).show();
-                    }
-
-                    else {
+                    } else {
                         Toast.makeText(context, R.string.no_network_connection, Toast.LENGTH_SHORT).show();
                     }
                 }
