@@ -52,7 +52,7 @@ import retrofit2.Response;
 public class EditProductActivity extends BaseActivity {
 
     public static EditText etxtProductCode;
-    EditText etxtProductName, etxtProductStock, etxtTax, etxtProductCategory, etxtProductDescription, etxtProductBuyPrice,etxtProductSellPrice, etxtProductSupplier, etxtProdcutWeightUnit, etxtProductWeight;
+    EditText etxtProductName, etxtProductStock, etxtTax, etxtProductCategory, etxtProductDescription, etxtProductBuyPrice, etxtProductSellPrice, etxtProductSupplier, etxtProdcutWeightUnit, etxtProductWeight;
     TextView txtUpdate, txtChooseImage, txtEditProduct;
     ImageView imgProduct, imgScanCode;
     String mediaPath = "na", encodedImage = "N/A";
@@ -64,6 +64,7 @@ public class EditProductActivity extends BaseActivity {
     ProgressDialog loading;
 
     String selectedCategoryID, selectedSupplierID, selectedWeightUnitID, productID;
+    boolean isEditProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,28 +97,64 @@ public class EditProductActivity extends BaseActivity {
         String shopID = sp.getString(Constant.SP_SHOP_ID, "");
         String ownerId = sp.getString(Constant.SP_OWNER_ID, "");
 
-
-        etxtProductName.setEnabled(false);
-        etxtProductCode.setEnabled(false);
-        etxtProductCategory.setEnabled(false);
-        etxtProductDescription.setEnabled(false);
-        etxtProductSellPrice.setEnabled(false);
-        etxtProductBuyPrice.setEnabled(false);
-        etxtProductStock.setEnabled(false);
-        etxtProductSupplier.setEnabled(false);
-        etxtProdcutWeightUnit.setEnabled(false);
-        etxtProductWeight.setEnabled(false);
-        txtChooseImage.setEnabled(false);
-        imgProduct.setEnabled(false);
-        imgScanCode.setEnabled(false);
-        etxtTax.setEnabled(false);
-
-
-        txtUpdate.setVisibility(View.GONE);
-
-
         productID = getIntent().getExtras().getString(Constant.PRODUCT_ID);
+        isEditProduct = getIntent().getExtras().getBoolean(Constant.PRODUCT_ISEDIT);
         getProductsData(productID, shopID);
+
+        if (isEditProduct) {
+
+            etxtProductName.setEnabled(true);
+            etxtProductCode.setEnabled(true);
+            etxtProductCategory.setEnabled(true);
+            etxtProductDescription.setEnabled(true);
+            etxtProductSellPrice.setEnabled(true);
+            etxtProductBuyPrice.setEnabled(true);
+            etxtProductStock.setEnabled(true);
+
+            etxtProductSupplier.setEnabled(true);
+            etxtProdcutWeightUnit.setEnabled(true);
+            etxtProductWeight.setEnabled(true);
+            txtChooseImage.setEnabled(true);
+            imgProduct.setEnabled(true);
+            imgScanCode.setEnabled(true);
+            etxtTax.setEnabled(true);
+
+
+            etxtProductName.setTextColor(Color.RED);
+            etxtProductCode.setTextColor(Color.RED);
+            etxtProductCategory.setTextColor(Color.RED);
+            etxtProductDescription.setTextColor(Color.RED);
+            etxtProductSellPrice.setTextColor(Color.RED);
+            etxtProductBuyPrice.setTextColor(Color.RED);
+            etxtProductStock.setTextColor(Color.RED);
+
+            etxtProductSupplier.setTextColor(Color.RED);
+            etxtProdcutWeightUnit.setTextColor(Color.RED);
+            etxtProductWeight.setTextColor(Color.RED);
+            etxtTax.setTextColor(Color.RED);
+            txtUpdate.setVisibility(View.VISIBLE);
+            txtEditProduct.setVisibility(View.GONE);
+
+
+        } else {
+            etxtProductName.setEnabled(false);
+            etxtProductCode.setEnabled(false);
+            etxtProductCategory.setEnabled(false);
+            etxtProductDescription.setEnabled(false);
+            etxtProductSellPrice.setEnabled(false);
+            etxtProductBuyPrice.setEnabled(false);
+            etxtProductStock.setEnabled(false);
+            etxtProductSupplier.setEnabled(false);
+            etxtProdcutWeightUnit.setEnabled(false);
+            etxtProductWeight.setEnabled(false);
+            txtChooseImage.setEnabled(false);
+            imgProduct.setEnabled(false);
+            imgScanCode.setEnabled(false);
+            etxtTax.setEnabled(false);
+            txtUpdate.setVisibility(View.GONE);
+            txtEditProduct.setVisibility(View.VISIBLE);
+        }
+
 
 
         imgProduct.setOnClickListener(new View.OnClickListener() {
@@ -424,8 +461,6 @@ public class EditProductActivity extends BaseActivity {
                 etxtTax.setTextColor(Color.RED);
                 txtUpdate.setVisibility(View.VISIBLE);
                 txtEditProduct.setVisibility(View.GONE);
-
-
             }
         });
 
@@ -443,7 +478,6 @@ public class EditProductActivity extends BaseActivity {
                 String tax = etxtTax.getText().toString();
 
 
-
                 if (productName.isEmpty()) {
                     etxtProductName.setError(getString(R.string.product_name_cannot_be_empty));
                     etxtProductName.requestFocus();
@@ -456,12 +490,10 @@ public class EditProductActivity extends BaseActivity {
                 } else if (productStock.isEmpty()) {
                     etxtProductStock.setError(getString(R.string.please_input_product_stcok));
                     etxtProductStock.requestFocus();
-                }
-                else if (productBuyPrice.isEmpty()) {
+                } else if (productBuyPrice.isEmpty()) {
                     etxtProductBuyPrice.setError(getString(R.string.product_sell_price_cannot_be_empty));
                     etxtProductBuyPrice.requestFocus();
-                }
-                else if (productSellPrice.isEmpty()) {
+                } else if (productSellPrice.isEmpty()) {
                     etxtProductSellPrice.setError(getString(R.string.product_sell_price_cannot_be_empty));
                     etxtProductSellPrice.requestFocus();
                 } else if (productWeight.isEmpty()) {
@@ -470,7 +502,7 @@ public class EditProductActivity extends BaseActivity {
                 } else {
 
 
-                    updateProduct(productName, productCode, selectedCategoryID, productDescription, productSellPrice, productWeight, selectedWeightUnitID, selectedSupplierID, productStock, tax,productBuyPrice);
+                    updateProduct(productName, productCode, selectedCategoryID, productDescription, productSellPrice, productWeight, selectedWeightUnitID, selectedSupplierID, productStock, tax, productBuyPrice);
 
 
                 }
@@ -550,7 +582,6 @@ public class EditProductActivity extends BaseActivity {
                         String productWeight = productData.get(0).getProductWeight();
                         String productWeightUnit = productData.get(0).getProductWeightUnit();
                         String tax = productData.get(0).getTax();
-
 
 
                         selectedCategoryID = productData.get(0).getProductCategoryId();
@@ -738,7 +769,7 @@ public class EditProductActivity extends BaseActivity {
 
 
     // Uploading Image/Video
-    private void updateProduct(String productName, String productCode, String productCategoryId, String productDescription, String productSellPrice, String productWeight, String productWeightUnitId, String productSupplierId, String productStock, String tax,String productBuyPrice) {
+    private void updateProduct(String productName, String productCode, String productCategoryId, String productDescription, String productSellPrice, String productWeight, String productWeightUnitId, String productSupplierId, String productStock, String tax, String productBuyPrice) {
 
         loading = new ProgressDialog(this);
         loading.setCancelable(false);
@@ -780,9 +811,9 @@ public class EditProductActivity extends BaseActivity {
         ApiInterface getResponse = ApiClient.getApiClient().create(ApiInterface.class);
         Call<Product> call;
         if (mediaPath.equals("na")) {
-            call = getResponse.updateProductWithoutImage(name, code, category, description, sellPrice, weight, weightUnitId, supplierId, stock, getProductID, getTax,buyPrice);
+            call = getResponse.updateProductWithoutImage(name, code, category, description, sellPrice, weight, weightUnitId, supplierId, stock, getProductID, getTax, buyPrice);
         } else {
-            call = getResponse.updateProduct(fileToUpload, filename, name, code, category, description, sellPrice, weight, weightUnitId, supplierId, stock, getProductID, getTax,buyPrice);
+            call = getResponse.updateProduct(fileToUpload, filename, name, code, category, description, sellPrice, weight, weightUnitId, supplierId, stock, getProductID, getTax, buyPrice);
         }
         call.enqueue(new Callback<Product>() {
             @Override

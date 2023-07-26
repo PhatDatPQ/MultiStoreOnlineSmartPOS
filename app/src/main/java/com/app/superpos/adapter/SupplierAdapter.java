@@ -156,7 +156,7 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.MyView
             img_edit = itemView.findViewById(R.id.img_edit);
 
 
-            itemView.setOnClickListener(this);
+          //  itemView.setOnClickListener(this);
 
         }
 

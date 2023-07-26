@@ -75,13 +75,8 @@ public class EditCustomersActivity extends BaseActivity {
             etxtCustomerCell.setTextColor(Color.RED);
             etxtCustomerEmail.setTextColor(Color.RED);
             etxtAddress.setTextColor(Color.RED);
-        } else {
-            etxtCustomerName.setEnabled(false);
-            etxtCustomerCell.setEnabled(false);
-            etxtCustomerEmail.setEnabled(false);
-            etxtAddress.setEnabled(false);
-            txtUpdateInformation.setVisibility(View.GONE);
-            txtEditCustomer.setVisibility(View.VISIBLE);
+            txtUpdateInformation.setVisibility(View.VISIBLE);
+            txtEditCustomer.setVisibility(View.GONE);
         }
 
 

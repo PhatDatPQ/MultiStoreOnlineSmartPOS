@@ -63,9 +63,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ProductAdapter.MyViewHolder holder, int position) {
-
-
-
         final String product_id = productData.get(position).getProductId();
         String name = productData.get(position).getProductName();
         String stock = productData.get(position).getProductStock();
@@ -140,6 +137,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             }
         });
 
+        holder.img_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, EditProductActivity.class);
+                i.putExtra(Constant.PRODUCT_ID, productData.get(position).getProductId());
+                i.putExtra(Constant.PRODUCT_ISEDIT, true);
+                context.startActivity(i);
+
+            }
+        });
     }
 
     @Override
@@ -150,7 +157,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView txtProductName, txtSupplierName, txtSellPrice,txtBuyPrice;
-        ImageView imgDelete, productImage;
+        ImageView imgDelete, productImage,img_edit;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -162,6 +169,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
             imgDelete = itemView.findViewById(R.id.img_delete);
             productImage = itemView.findViewById(R.id.product_image);
+            img_edit = itemView.findViewById(R.id.img_edit);
 
             itemView.setOnClickListener(this);
 
@@ -173,6 +181,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         public void onClick(View view) {
             Intent i = new Intent(context, EditProductActivity.class);
             i.putExtra(Constant.PRODUCT_ID, productData.get(getAdapterPosition()).getProductId());
+            i.putExtra(Constant.PRODUCT_ISEDIT, false);
             context.startActivity(i);
 
         }

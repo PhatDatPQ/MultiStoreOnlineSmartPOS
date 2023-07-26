@@ -93,6 +93,7 @@ public class Constant {
     public static final String SUPPLIERS_ISEDIT="suppliers_isedit";
 
     public static final String KEY_FILE="file";
+    public static final String PRODUCT_ISEDIT="product_is_edit";
     public static final String PRODUCT_ID="product_id";
     public static final String PRODUCT_NAME="product_name";
     public static final String PRODUCT_WEIGHT = "product_weight";
