@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.app.superpos.Constant;
+import com.app.superpos.model.Login;
+import com.app.superpos.model.ShopTable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,32 +113,35 @@ public class DatabaseAccess {
 
 
     //Add product into cart
-    public int addToCart(String productId, String productName, String weight, String weightUnit, String price, int qty, String productImage,String productStock,double tax) {
+    public int addToCart(String product_id, String productName, String weight, String weight_unit_name, String price, int qty, String stock, String is_submitted, String tax, String currency) {
+//product_cart
+        Cursor cursor1 = database.rawQuery("SELECT * FROM " + Constant.productCart + "", null);
+        int columnIndex = cursor1.getColumnIndex(Constant.is_submitted);
+        if (columnIndex < 0) {
+            database.execSQL("ALTER TABLE " + Constant.productCart + " ADD COLUMN " + "is_submitted" + " TEXT");
+        }
+        Cursor result = database.rawQuery("SELECT * FROM " + Constant.productCart + " WHERE product_id='" + product_id + "'", null);
 
-
-        Cursor result = database.rawQuery("SELECT * FROM product_cart WHERE product_id='" + productId + "'", null);
         if (result.getCount() >= 1) {
 
             return 2;
 
         } else {
             ContentValues values = new ContentValues();
-            values.put(Constant.PRODUCT_ID, productId);
+            values.put(Constant.PRODUCT_ID, product_id);
             values.put(Constant.PRODUCT_NAME, productName);
             values.put(Constant.PRODUCT_WEIGHT, weight);
-            values.put(Constant.PRODUCT_WEIGHT_UNIT, weightUnit);
+            values.put(Constant.PRODUCT_WEIGHT_UNIT, weight_unit_name);
             values.put(Constant.PRODUCT_PRICE, price);
             values.put(Constant.PRODUCT_QTY, qty);
-            values.put(Constant.PRODUCT_IMAGE, productImage);
-            values.put(Constant.PRODUCT_STOCK, productStock);
-
+            values.put(Constant.PRODUCT_STOCK, stock);
             values.put(Constant.TAX, tax);
-
+            // values.put(Constant.SP_CURRENCY_SYMBOL, currency);
+            values.put("is_submitted", is_submitted);
 
             long check = database.insert(Constant.productCart, null, values);
 
 
-            result.close();
             database.close();
 
 
@@ -247,12 +252,8 @@ public class DatabaseAccess {
 
         String currency = "n/a";
         Cursor cursor = database.rawQuery("SELECT * FROM shop", null);
-
-
         if (cursor.moveToFirst()) {
             do {
-
-
                 currency = cursor.getString(5);
 
 
@@ -1248,4 +1249,92 @@ public class DatabaseAccess {
         }
 
     }
+
+    public String getLatestProductQuantity(String product_id) {
+
+        String product_qty = "0";
+        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.productCart + " WHERE product_id='" + product_id + "'", null);
+        if (cursor.moveToFirst()) {
+            do {
+                //Constant.PRODUCT_QTY, cursor.getString(cursor.getColumnIndex("product_qty")))
+                product_qty = cursor.getString(cursor.getColumnIndex("product_qty"));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        return product_qty;
+    }
+
+    public String getCartIdFromProductCart(String product_id) {
+        ArrayList<HashMap<String, String>> product = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.productCart + " WHERE product_id='" + product_id + "'", null);
+        String cartId = null;
+        if (cursor.moveToFirst()) {
+            do {
+                cartId = cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        database.close();
+        return cartId;
+    }
+
+    public void createShop() {
+
+        open();
+        // creating table
+        database.execSQL("DROP TABLE IF EXISTS " + Constant.shop);
+        String query = "CREATE TABLE " + Constant.shop +
+                " ( " +
+                " shop_id " + "Text," +
+                " shop_name " + "Text," +
+                " shop_contact " + "Text," +
+                " shop_email " + "Text," +
+                " shop_address " + "Text," +
+                " shop_status " + "Text," +
+                " shop_owner_id " + "Text," +
+                " shop_gst_no " + "Text," +
+                " shop_fssai_no " + "Text," +
+                " shop_city " + "Text," +
+                " shop_state " + "Text," +
+                " shop_currency " + "Text," +
+                " tax " + "Text," +
+                " Tax_No " + "Text," +
+                " shop_logo " + "Text" +
+                " ) ";
+        database.execSQL(query);
+        close();
+    }
+
+    public boolean insertShop(ShopTable shopTable) {
+        open();
+        ContentValues values = new ContentValues();
+        values.put(Constant.ShopID, shopTable.getShopId());
+        values.put(Constant.SP_SHOP_NAME, shopTable.getShopName());
+        values.put(Constant.SP_SHOP_CONTACT, shopTable.getShopContact());
+        values.put(Constant.SP_SHOP_EMAIL, shopTable.getShopEmail());
+        values.put(Constant.SP_SHOP_ADDRESS, shopTable.getShopAddress());
+        values.put(Constant.SP_SHOP_STATUS, shopTable.getShopStatus());
+        values.put(Constant.shop_owner_id, shopTable.getShop_owner_id());
+        values.put(Constant.shop_gst_no, shopTable.getShop_gst_no());
+        values.put(Constant.shop_fssai_no, shopTable.getShop_fssai_no());
+        values.put(Constant.shop_city, shopTable.getShop_city());
+        values.put(Constant.shop_state, shopTable.getShop_state());
+        values.put(Constant.SP_SHOP_CURRENCY, shopTable.getShop_currency());
+        values.put(Constant.SP_TAX, shopTable.getTax());
+        values.put(Constant.Tax_No, shopTable.getTax());
+        values.put(Constant.shop_logo, shopTable.getShop_logo());
+
+        long check = database.insert(Constant.shop, null, values);
+        close();
+        if (check == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }

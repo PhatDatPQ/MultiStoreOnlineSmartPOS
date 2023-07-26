@@ -14,7 +14,9 @@ import androidx.annotation.NonNull;
 import com.app.superpos.Constant;
 import com.app.superpos.HomeActivity;
 import com.app.superpos.R;
+import com.app.superpos.database.DatabaseAccess;
 import com.app.superpos.model.Login;
+import com.app.superpos.model.ShopTable;
 import com.app.superpos.networking.ApiClient;
 import com.app.superpos.networking.ApiInterface;
 import com.app.superpos.utils.BaseActivity;
@@ -32,6 +34,7 @@ public class LoginActivity extends BaseActivity {
     SharedPreferences sp;
     ProgressDialog loading;
     Utils utils;
+    DatabaseAccess databaseAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class LoginActivity extends BaseActivity {
 
 
         getSupportActionBar().hide();
-
+        databaseAccess = DatabaseAccess.getInstance(LoginActivity.this);
         etxtEmail = findViewById(R.id.etxt_email);
         etxtPassword = findViewById(R.id.etxt_password);
         txtLogin = findViewById(R.id.txt_login);
@@ -86,7 +89,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-
+        databaseAccess.createShop();
     }
 
 
@@ -182,5 +185,23 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
+    }
+
+
+    private void initShopData(Login st) {
+        ShopTable shops = new ShopTable();
+        shops.setShopName(st.getShopName());
+        shops.setShopId(st.getShopId());
+        shops.setShopContact(st.getShopContact());
+        shops.setShopEmail(st.getShopEmail());
+        shops.setShopAddress(st.getShopAddress());
+      //  shops.setShop_owner_id(st.getOwnerId());
+        shops.setShopCurrency(st.getCurrencySymbol());
+        shops.setTax(st.getTax());
+        shops.setTax_No(st.getTax());
+        shops.setShopState(st.getShopStatus());
+      //  shops.setShopOwnerId(st.getOwnerId());
+        databaseAccess.insertShop(shops);
+      //  getShopInfo(st.getShopId());
     }
 }

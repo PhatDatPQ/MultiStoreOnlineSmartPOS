@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,27 +30,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductCategoryAdapter extends RecyclerView.Adapter<ProductCategoryAdapter.MyViewHolder> {
 
+public class ProductCategoryAdapter extends RecyclerView.Adapter<ProductCategoryAdapter.MyViewHolder> {
 
     MediaPlayer player;
     private List<Category> categoryData;
     private Context context;
     RecyclerView recyclerView;
-    ImageView imgNoProduct;
-    TextView txtNoProducts;
+    LinearLayout linearLayoutNoProduct;
     private ShimmerFrameLayout mShimmerViewContainer;
     SharedPreferences sp;
 
 
-    public ProductCategoryAdapter(Context context, List<Category> categoryData, RecyclerView recyclerView, ImageView imgNoProduct, TextView txtNoProducts, ShimmerFrameLayout mShimmerViewContainer) {
+    public ProductCategoryAdapter(Context context, List<Category> categoryData, RecyclerView recyclerView, LinearLayout linearLayoutNoProduct, ShimmerFrameLayout mShimmerViewContainer) {
         this.context = context;
         this.categoryData = categoryData;
         this.recyclerView = recyclerView;
         player = MediaPlayer.create(context, R.raw.delete_sound);
 
-        this.imgNoProduct = imgNoProduct;
-        this.txtNoProducts = txtNoProducts;
+        this.linearLayoutNoProduct = linearLayoutNoProduct;
         this.mShimmerViewContainer = mShimmerViewContainer;
         sp = context.getSharedPreferences(Constant.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
@@ -130,9 +129,7 @@ public class ProductCategoryAdapter extends RecyclerView.Adapter<ProductCategory
                     if (productsList.isEmpty()) {
 
                         recyclerView.setVisibility(View.GONE);
-                        imgNoProduct.setVisibility(View.VISIBLE);
-                        txtNoProducts.setVisibility(View.VISIBLE);
-                        imgNoProduct.setImageResource(R.drawable.not_found);
+                        linearLayoutNoProduct.setVisibility(View.VISIBLE);
                         //Stopping Shimmer Effects
                         mShimmerViewContainer.stopShimmer();
                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -144,10 +141,8 @@ public class ProductCategoryAdapter extends RecyclerView.Adapter<ProductCategory
                         //Stopping Shimmer Effects
                         mShimmerViewContainer.stopShimmer();
                         mShimmerViewContainer.setVisibility(View.GONE);
-
                         recyclerView.setVisibility(View.VISIBLE);
-                        imgNoProduct.setVisibility(View.GONE);
-                        txtNoProducts.setVisibility(View.GONE);
+                        linearLayoutNoProduct.setVisibility(View.GONE);
                         PosProductAdapter productAdapter = new PosProductAdapter(context, productsList);
 
                         recyclerView.setAdapter(productAdapter);

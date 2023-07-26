@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +30,13 @@ import com.app.superpos.model.Category;
 import com.app.superpos.model.Product;
 import com.app.superpos.networking.ApiClient;
 import com.app.superpos.networking.ApiInterface;
+import com.app.superpos.product.AddProductActivity;
 import com.app.superpos.utils.BaseActivity;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -40,27 +45,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PosActivity extends BaseActivity {
-
-
     private RecyclerView recyclerView, categoryRecyclerView;
     PosProductAdapter productAdapter;
     TextView txtNoProducts, txtReset;
     ProductCategoryAdapter categoryAdapter;
 
     ImageView imgNoProduct, imgScanner, imgCart, imgBack;
-    ;
     public static EditText etxtSearch;
     public static TextView txtCount;
 
     private ShimmerFrameLayout mShimmerViewContainer;
     DatabaseAccess databaseAccess;
+    FloatingActionButton fabAdd;
+    LinearLayout liner_no_products;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos);
-
-
         getSupportActionBar().setHomeButtonEnabled(true); //for back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//for back button
         getSupportActionBar().setTitle(R.string.all_product);
@@ -76,6 +78,8 @@ public class PosActivity extends BaseActivity {
         imgBack = findViewById(R.id.img_back);
         imgCart = findViewById(R.id.img_cart);
         txtCount = findViewById(R.id.txt_count);
+        fabAdd = findViewById(R.id.fab_add);
+        liner_no_products = findViewById(R.id.liner_no_products);
         databaseAccess = DatabaseAccess.getInstance(PosActivity.this);
 
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
@@ -177,6 +181,10 @@ public class PosActivity extends BaseActivity {
                 finish();
             }
         });
+        fabAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(PosActivity.this, AddProductActivity.class);
+            startActivity(intent);
+        });
 
 
     }
@@ -205,8 +213,6 @@ public class PosActivity extends BaseActivity {
 
 
                 if (response.isSuccessful() && response.body() != null) {
-
-
                     List<Category> productCategory;
                     productCategory = response.body();
 
@@ -217,7 +223,7 @@ public class PosActivity extends BaseActivity {
 
                     } else {
 
-                        categoryAdapter = new ProductCategoryAdapter(PosActivity.this, productCategory, recyclerView, imgNoProduct, txtNoProducts, mShimmerViewContainer);
+                        categoryAdapter = new ProductCategoryAdapter(PosActivity.this, productCategory, recyclerView,liner_no_products, mShimmerViewContainer);
 
                         categoryRecyclerView.setAdapter(categoryAdapter);
 
@@ -253,32 +259,26 @@ public class PosActivity extends BaseActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Product> productsList;
                     productsList = response.body();
-
-
                     if (productsList.isEmpty()) {
 
                         recyclerView.setVisibility(View.GONE);
+                        liner_no_products.setVisibility(View.VISIBLE);
                         imgNoProduct.setVisibility(View.VISIBLE);
                         txtNoProducts.setVisibility(View.VISIBLE);
                         imgNoProduct.setImageResource(R.drawable.not_found);
                         //Stopping Shimmer Effects
                         mShimmerViewContainer.stopShimmer();
                         mShimmerViewContainer.setVisibility(View.GONE);
-
-
                     } else {
-
-
                         //Stopping Shimmer Effects
                         mShimmerViewContainer.stopShimmer();
                         mShimmerViewContainer.setVisibility(View.GONE);
                         txtNoProducts.setVisibility(View.GONE);
+                        liner_no_products.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                         imgNoProduct.setVisibility(View.GONE);
                         productAdapter = new PosProductAdapter(PosActivity.this, productsList);
-
                         recyclerView.setAdapter(productAdapter);
-
                     }
 
                 }

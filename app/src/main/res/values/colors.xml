@@ -25,5 +25,6 @@
 
     <color name="red">#E32626</color>
     <color name="black_hex">#272727</color>
+    <color name="colorPrimary_2">#357DEA</color>
 
 </resources>

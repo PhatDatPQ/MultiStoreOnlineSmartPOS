@@ -94,12 +94,12 @@ public class Constant {
     public static final String KEY_FILE="file";
     public static final String PRODUCT_ID="product_id";
     public static final String PRODUCT_NAME="product_name";
+    public static final String PRODUCT_WEIGHT = "product_weight";
     public static final String PRODUCT_CODE="product_code";
     public static final String PRODUCT_CATEGORY="product_category";
     public static final String PRODUCT_DESCRIPTION="product_description";
     public static final String PRODUCT_WEIGHT_UNIT_ID="product_weight_unit_id";
     public static final String PRODUCT_WEIGHT_UNIT="product_weight_unit";
-    public static final String PRODUCT_WEIGHT="product_weight";
     public static final String PRODUCT_STOCK="product_stock";
     public static final String PRODUCT_PRICE="product_price";
     public static final String PRODUCT_QTY="product_qty";
@@ -181,5 +181,15 @@ public class Constant {
 
     public static final String KEY_EXISTS= "exists";
 
-
+    public static String is_submitted = "is_submitted";
+    public static String shop = "shop";
+    public static final String ShopID = "shop_id";
+    public static final String shop_owner_id = "shop_owner_id";
+    public static final String shop_gst_no = "shop_gst_no";
+    public static final String shop_fssai_no = "shop_fssai_no";
+    public static final String shop_city = "shop_city";
+    public static final String shop_state = "shop_state";
+    public static final String SP_SHOP_CURRENCY = "shop_currency";
+    public static final String Tax_No = "Tax_No";
+    public static final String shop_logo = "shop_logo";
 }
