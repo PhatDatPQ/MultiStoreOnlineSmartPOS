@@ -153,7 +153,7 @@
         android:id="@+id/recycler_home_prod"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="30dp"
         android:padding="5dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/item_home_module"

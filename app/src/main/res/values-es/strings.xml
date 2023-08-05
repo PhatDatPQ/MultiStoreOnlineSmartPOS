@@ -185,8 +185,8 @@
     <string name="want_to_logout_from_app">¿Desea cerrar sesión desde la aplicación?</string>
     <string name="delete">ELIMINAR</string>
     <string name="tax">Impuesto</string>
-    <string name="total_tax">Total impuestos</string>
-    <string name="sub_total">Total parcial:</string>
+    <string name="total_tax">Total impuestos: </string>
+    <string name="sub_total">Total parcial: </string>
     <string name="discount">Descuento:</string>
     <string name="discount_cant_be_greater_than_total_price">El descuento no puede ser mayor que el precio total</string>
     <string name="net_sales">Las ventas netas</string>

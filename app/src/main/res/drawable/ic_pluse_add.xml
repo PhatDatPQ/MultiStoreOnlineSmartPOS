@@ -4,10 +4,10 @@
     android:viewportWidth="16"
     android:viewportHeight="17">
     <path
-        android:fillColor="#43a047"
+        android:fillColor="#357DEA"
         android:pathData="M8,8.6m-7.5,0a7.5,7.5 0,1 1,15 0a7.5,7.5 0,1 1,-15 0"
         android:strokeWidth="1"
-        android:strokeColor="#43a047" />
+        android:strokeColor="#357DEA" />
     <group>
         <group>
             <path

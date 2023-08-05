@@ -2,9 +2,9 @@
 <resources>
     <color name="bg_skyblue">#357DEA</color>
     <color name="bg_green">#6BD207</color>
-    <color name="colorPrimary">#43a047</color>
-    <color name="colorPrimaryDark">#43a047</color>
-    <color name="colorAccent">#43a047</color>
+    <color name="colorPrimary">@color/black_hex</color>
+    <color name="colorPrimaryDark">@color/black_hex</color>
+    <color name="colorAccent">@color/black_hex</color>
     <color name="white">#FFFFFF</color>
 
     <color name="textColorPrimaryDark">#757575</color>
@@ -26,5 +26,6 @@
     <color name="red">#E32626</color>
     <color name="black_hex">#272727</color>
     <color name="colorPrimary_2">#357DEA</color>
+    <color name="text_hint_2">#BDBDBD</color>
 
 </resources>

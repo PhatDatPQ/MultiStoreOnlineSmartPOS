@@ -40,12 +40,14 @@ public class PosProductAdapter extends RecyclerView.Adapter<PosProductAdapter.My
     MediaPlayer player;
     public static int count;
     String qty1;
-
+    SharedPreferences sp;
+    String currency;
 
     public PosProductAdapter(Context context, List<Product> productData) {
         this.context = context;
         this.productData = productData;
         player = MediaPlayer.create(context, R.raw.delete_sound);
+        sp = context.getSharedPreferences(Constant.SHARED_PREF_NAME, Context.MODE_PRIVATE);
     }
 
 
@@ -62,7 +64,7 @@ public class PosProductAdapter extends RecyclerView.Adapter<PosProductAdapter.My
 
         final DatabaseAccess databaseAccess = DatabaseAccess.getInstance(context);
         databaseAccess.open();
-        String currency = databaseAccess.getCurrency();
+        currency = sp.getString(Constant.SP_CURRENCY_SYMBOL, "");
 
         final String product_id = productData.get(position).getProductId();
         final String name = productData.get(position).getProductName();
@@ -73,6 +75,7 @@ public class PosProductAdapter extends RecyclerView.Adapter<PosProductAdapter.My
         final String weight_unit_id = productData.get(position).getProductWeightUnitId();
         final String weight_unit_name = productData.get(position).getProductWeightUnit();
         final String tax = productData.get(position).getTax();
+
         String base64Image = productData.get(position).getProductImage();
         String imagePath = productData.get(position).getProductImage();
         if (!TextUtils.isEmpty(imagePath) && imagePath != null) {
@@ -97,7 +100,7 @@ public class PosProductAdapter extends RecyclerView.Adapter<PosProductAdapter.My
         }
         holder.txtWeight.setText(product_weight + " " + product_UnitName);
         holder.txtPrice.setText(currency + " " + product_price);
-        holder.txt_Tax.setText("Tax: "+tax);
+        holder.txt_Tax.setText("Tax: " + tax);
 
 
         holder.cardProduct.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +146,7 @@ public class PosProductAdapter extends RecyclerView.Adapter<PosProductAdapter.My
                 } else {
                     get_qty++;
                     databaseAccess.open();
-                    AddToCartFromPOSProduct(getStock, name, databaseAccess, product_id, product_weight, weight_unit_name, product_price, get_qty, product_stock, tax,currency);
+                    AddToCartFromPOSProduct(getStock, name, databaseAccess, product_id, product_weight, weight_unit_name, product_price, get_qty, product_stock, tax, currency);
                     holder.txt_number.setText("" + get_qty);
                     databaseAccess.open();
                     final String cart_id = databaseAccess.getCartIdFromProductCart(product_id);

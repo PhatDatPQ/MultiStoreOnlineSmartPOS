@@ -10,6 +10,7 @@ import com.app.superpos.model.Login;
 import com.app.superpos.model.MonthData;
 import com.app.superpos.model.OrderDetails;
 import com.app.superpos.model.OrderList;
+import com.app.superpos.model.OrdersSubmitResp;
 import com.app.superpos.model.Product;
 import com.app.superpos.model.SalesReport;
 import com.app.superpos.model.ShopInformation;
@@ -43,7 +44,7 @@ public interface ApiInterface {
 
     //calling json array , need list
     @POST("orders_submit.php")
-    Call<String> submitOrders(
+    Call<OrdersSubmitResp> submitOrders(
             @Body RequestBody ordersData
     );
 

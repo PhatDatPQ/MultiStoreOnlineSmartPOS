@@ -2,6 +2,7 @@ package com.app.superpos.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ public class ProductCategoryAdapter extends RecyclerView.Adapter<ProductCategory
     private ShimmerFrameLayout mShimmerViewContainer;
     SharedPreferences sp;
 
+    private int selectedItemPosition = -1;
 
     public ProductCategoryAdapter(Context context, List<Category> categoryData, RecyclerView recyclerView, LinearLayout linearLayoutNoProduct, ShimmerFrameLayout mShimmerViewContainer) {
         this.context = context;
@@ -80,9 +82,18 @@ public class ProductCategoryAdapter extends RecyclerView.Adapter<ProductCategory
                 getProductsData(categoryId, shopID);
                 mShimmerViewContainer.startShimmer();
 
-
+                selectedItemPosition = position;
+                notifyDataSetChanged();
             }
         });
+
+        if (selectedItemPosition == position) {
+            holder.cardCategory.setCardBackgroundColor(Color.parseColor("#272727"));
+            holder.txtCategoryName.setTextColor(Color.parseColor("#FFFFFF"));
+        } else {
+            holder.cardCategory.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+            holder.txtCategoryName.setTextColor(Color.parseColor("#272727"));
+        }
 
 
     }

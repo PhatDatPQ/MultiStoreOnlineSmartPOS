@@ -30,7 +30,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 
     }
 
-
     @NonNull
     @Override
     public CategoryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,17 +37,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         return new MyViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull final CategoryAdapter.MyViewHolder holder, int position) {
-
-
         String categoryName = categoryData.get(position).getProductCategoryName();
         holder.txtCategoryName.setText(categoryName);
-
-
-
-
     }
 
     @Override
@@ -57,17 +49,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
         TextView txtCategoryName;
-
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
             txtCategoryName = itemView.findViewById(R.id.txt_category_name);
-
-
-
             itemView.setOnClickListener(this);
 
         }

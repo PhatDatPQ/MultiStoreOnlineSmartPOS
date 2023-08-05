@@ -5,6 +5,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import static com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype.Slidetop;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -79,7 +80,7 @@ import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity implements IHomeGridClickListener {
     DecimalFormat f;
-    String currency,shopID,ownerId;
+    String currency, shopID, ownerId;
     BarChart barChart;
     int mYear;
 
@@ -102,10 +103,10 @@ public class HomeActivity extends BaseActivity implements IHomeGridClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         getSupportActionBar().setTitle(R.string.app_name);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
-        getSupportActionBar().setElevation(0);
+
+
         recyViewModuleGrid = findViewById(R.id.recycler_home_prod);
         recyViewModuleGrid.setAdapter(new HomeModuleAdapter(this, initModuleGridDate(), this));
         barChart = findViewById(R.id.barchart);
@@ -131,16 +132,16 @@ public class HomeActivity extends BaseActivity implements IHomeGridClickListener
         f = new DecimalFormat("#0.00");
 
         String currentYear = new SimpleDateFormat("yyyy", Locale.ENGLISH).format(new Date());
-       // txtSelectYear.setText(getString(R.string.year) + currentYear);
+        // txtSelectYear.setText(getString(R.string.year) + currentYear);
 
-        mYear=Integer.parseInt(currentYear);
+        mYear = Integer.parseInt(currentYear);
 
-        getMonthlySales(shopID,ownerId,currentYear);
+        getMonthlySales(shopID, ownerId, currentYear);
 
         if (SDK_INT >= Build.VERSION_CODES.R) {
             requestPermission();
         }
-       //       Admob initialization
+        //       Admob initialization
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -149,7 +150,7 @@ public class HomeActivity extends BaseActivity implements IHomeGridClickListener
 
         //  adView = findViewById(R.id.adview);
         AdRequest adRequest = new AdRequest.Builder().build();
-       //   adView.loadAd(adRequest);
+        //   adView.loadAd(adRequest);
 
 
     }
@@ -355,11 +356,11 @@ public class HomeActivity extends BaseActivity implements IHomeGridClickListener
 
     }
 
-    public void getMonthlySales(String shopId,String ownerId,String year) {
+    public void getMonthlySales(String shopId, String ownerId, String year) {
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<MonthData>> call;
-        call = apiInterface.getMonthlySales(shopId,ownerId,year);
+        call = apiInterface.getMonthlySales(shopId, ownerId, year);
 
         call.enqueue(new Callback<List<MonthData>>() {
             @Override
@@ -380,8 +381,8 @@ public class HomeActivity extends BaseActivity implements IHomeGridClickListener
                     } else {
 
                         //Stopping Shimmer Effects
-                      //  mShimmerViewContainer.stopShimmer();
-                       // mShimmerViewContainer.setVisibility(View.GONE);
+                        //  mShimmerViewContainer.stopShimmer();
+                        // mShimmerViewContainer.setVisibility(View.GONE);
 
                         barEntries = new ArrayList<>();
                         float jan = Float.parseFloat(monthDataList.get(0).getJan());
@@ -419,16 +420,16 @@ public class HomeActivity extends BaseActivity implements IHomeGridClickListener
                         getGraphData();
 
                         barChart.setVisibility(View.VISIBLE);
-                       // txtTotalSales.setVisibility(View.VISIBLE);
+                        // txtTotalSales.setVisibility(View.VISIBLE);
 
 
-                       // txtTotalSales.setText(getString(R.string.total_sales) + currency + f.format(totalOrderPrice));
+                        // txtTotalSales.setText(getString(R.string.total_sales) + currency + f.format(totalOrderPrice));
 
-                       // txtTotalTax.setText(getString(R.string.total_tax) + ":" + currency + f.format(totalTax));
-                       // txtTotalDiscount.setText(getString(R.string.total_discount) + ":" + currency + f.format(totalDiscount));
+                        // txtTotalTax.setText(getString(R.string.total_tax) + ":" + currency + f.format(totalTax));
+                        // txtTotalDiscount.setText(getString(R.string.total_discount) + ":" + currency + f.format(totalDiscount));
                         float netSales = totalOrderPrice + totalTax - totalDiscount;
 
-                       // txtNetSales.setText(getString(R.string.net_sales) + currency + f.format(netSales));
+                        // txtNetSales.setText(getString(R.string.net_sales) + currency + f.format(netSales));
 
                     }
 
@@ -450,9 +451,9 @@ public class HomeActivity extends BaseActivity implements IHomeGridClickListener
         MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(this, new MonthPickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(int selectedMonth, int selectedYear) {
-               // txtSelectYear.setText(getString(R.string.year)+" "+selectedYear);
+                // txtSelectYear.setText(getString(R.string.year)+" "+selectedYear);
                 mYear = selectedYear;
-                getMonthlySales(shopID,ownerId,""+mYear);
+                getMonthlySales(shopID, ownerId, "" + mYear);
 
             }
         }, mYear, 0);
@@ -462,7 +463,6 @@ public class HomeActivity extends BaseActivity implements IHomeGridClickListener
                 .build()
                 .show();
     }
-
 
 
 }

@@ -11,51 +11,32 @@
         android:id="@+id/card_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="5dp"
-        app:cardPreventCornerOverlap="false">
+        app:cardCornerRadius="15dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPaddingBottom="15dp"
+        app:contentPaddingLeft="10dp"
+        app:cardMaxElevation="2dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:contentPaddingRight="10dp"
+        app:contentPaddingTop="15dp">
 
-        <LinearLayout
-            android:id="@+id/liner_category_child"
+        <TextView
+            android:id="@+id/txt_category_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
+            android:fontFamily="@font/sailec_medium"
+            android:minWidth="100dp"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="8dp">
+            android:text="@string/category_name"
+            android:textColor="#000000"
+            android:textSize="12sp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:contentDescription="TODO"
-                    android:padding="10dp"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/category" />
-
-                <TextView
-                    android:id="@+id/txt_category_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sailec_regular"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:text="@string/category_name"
-                    android:textColor="#000000"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/translation"
+        android:icon="@drawable/translation_black"
         android:orderInCategory="100"
+        android:iconTint="@color/black_hex"
         android:title="@string/action_settings"
         app:showAsAction="always">
         <menu>

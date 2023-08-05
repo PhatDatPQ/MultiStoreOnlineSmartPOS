@@ -176,8 +176,8 @@
     <string name="want_to_logout_from_app">एप्लिकेशन से लॉगआउट करना चाहते हैं?</string>
     <string name="delete">हटाएँ</string>
     <string name="tax">कर</string>
-    <string name="total_tax">कुल कर</string>
-    <string name="sub_total">उप कुल:</string>
+    <string name="total_tax">कुल कर: </string>
+    <string name="sub_total">उप कुल: </string>
     <string name="discount">छूट:</string>
     <string name="discount_cant_be_greater_than_total_price">छूट कुल मूल्य से अधिक नहीं हो सकती</string>
     <string name="net_sales">कुल बिक्री</string>

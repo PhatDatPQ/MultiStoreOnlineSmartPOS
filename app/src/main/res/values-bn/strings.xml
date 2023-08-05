@@ -198,8 +198,8 @@
     <string name="want_to_logout_from_app">অ্যাপ থেকে লগআউট করতে চান?</string>
     <string name="delete">মুছে ফেলা</string>
     <string name="tax">ট্যাক্স </string>
-    <string name="total_tax">মোট ট্যাক্স </string>
-    <string name="sub_total">সাব টোটাল:</string>
+    <string name="total_tax">মোট ট্যাক্স: </string>
+    <string name="sub_total">সাব টোটাল: </string>
     <string name="discount">ডিসকাউন্ট:</string>
     <string name="discount_cant_be_greater_than_total_price">ছাড় মোট মূল্যের চেয়ে বেশি হতে পারে না</string>
     <string name="net_sales">নেট বিক্রয়</string>

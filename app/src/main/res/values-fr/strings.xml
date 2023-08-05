@@ -177,8 +177,8 @@
     <string name="want_to_logout_from_app">Vous voulez vous déconnecter de l\'application?</string>
     <string name="delete">SUPPRIMER</string>
     <string name="tax">Impôt</string>
-    <string name="total_tax">Taxe total</string>
-    <string name="sub_total">Total:</string>
+    <string name="total_tax">Taxe total: </string>
+    <string name="sub_total">Total: </string>
     <string name="discount">Remise:</string>
     <string name="discount_cant_be_greater_than_total_price">La remise ne peut pas être supérieure au prix total</string>
     <string name="net_sales">Ventes nettes</string>

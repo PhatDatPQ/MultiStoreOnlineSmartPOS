@@ -10,6 +10,10 @@ import com.app.superpos.Constant;
 import com.app.superpos.model.Login;
 import com.app.superpos.model.ShopTable;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,9 +68,6 @@ public class DatabaseAccess {
     }
 
 
-
-
-
     //insert payment method
     public boolean addPaymentMethod(String paymentMethodName) {
 
@@ -88,7 +89,6 @@ public class DatabaseAccess {
     }
 
 
-
     //update payment method
     public boolean updatePaymentMethod(String paymentMethodId, String paymentMethodName) {
 
@@ -108,8 +108,6 @@ public class DatabaseAccess {
             return true;
         }
     }
-
-
 
 
     //Add product into cart
@@ -136,7 +134,6 @@ public class DatabaseAccess {
             values.put(Constant.PRODUCT_QTY, qty);
             values.put(Constant.PRODUCT_STOCK, stock);
             values.put(Constant.TAX, tax);
-            // values.put(Constant.SP_CURRENCY_SYMBOL, currency);
             values.put("is_submitted", is_submitted);
 
             long check = database.insert(Constant.productCart, null, values);
@@ -158,13 +155,12 @@ public class DatabaseAccess {
 
     //get cart product
     public ArrayList<HashMap<String, String>> getCartProduct() {
+        open();
         ArrayList<HashMap<String, String>> product = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM product_cart ORDER BY cart_id DESC", null);
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> map = new HashMap<>();
-
-
                 map.put(Constant.CART_ID, cursor.getString(cursor.getColumnIndex("cart_id")));
                 map.put(Constant.PRODUCT_ID, cursor.getString(cursor.getColumnIndex("product_id")));
                 map.put(Constant.PRODUCT_NAME, cursor.getString(cursor.getColumnIndex("product_name")));
@@ -174,10 +170,7 @@ public class DatabaseAccess {
                 map.put(Constant.PRODUCT_QTY, cursor.getString(cursor.getColumnIndex("product_qty")));
                 map.put(Constant.PRODUCT_IMAGE, cursor.getString(cursor.getColumnIndex("product_image")));
                 map.put(Constant.PRODUCT_STOCK, cursor.getString(cursor.getColumnIndex("product_stock")));
-
                 map.put(Constant.TAX, cursor.getString(cursor.getColumnIndex("tax")));
-
-
 
 
                 product.add(map);
@@ -196,10 +189,6 @@ public class DatabaseAccess {
         database.delete(Constant.productCart, null, null);
         database.close();
     }
-
-
-
-
 
 
     //delete product from cart
@@ -243,8 +232,6 @@ public class DatabaseAccess {
 
 
     }
-
-
 
 
     //get product name
@@ -293,8 +280,6 @@ public class DatabaseAccess {
     }
 
 
-
-
     //calculate total price of product
     public double getTotalTax() {
 
@@ -319,8 +304,6 @@ public class DatabaseAccess {
         database.close();
         return totalTax;
     }
-
-
 
 
     //calculate total CGST
@@ -349,7 +332,6 @@ public class DatabaseAccess {
     }
 
 
-
     //calculate total SGST
     public double getTotalSGST() {
 
@@ -374,7 +356,6 @@ public class DatabaseAccess {
         database.close();
         return totalSGST;
     }
-
 
 
     //calculate total SGST
@@ -662,6 +643,7 @@ public class DatabaseAccess {
 
     //get order type data
     public ArrayList<HashMap<String, String>> getOrderType() {
+        open();
         ArrayList<HashMap<String, String>> orderType = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM order_type ORDER BY order_type_id DESC", null);
         if (cursor.moveToFirst()) {
@@ -684,6 +666,7 @@ public class DatabaseAccess {
 
     //get order type data
     public ArrayList<HashMap<String, String>> getPaymentMethod() {
+        open();
         ArrayList<HashMap<String, String>> paymentMethod = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM payment_method ORDER BY payment_method_id DESC", null);
         if (cursor.moveToFirst()) {
@@ -758,6 +741,7 @@ public class DatabaseAccess {
 
     //get shop information
     public ArrayList<HashMap<String, String>> getShopInformation() {
+        open();
         ArrayList<HashMap<String, String>> shopInfo = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM shop", null);
         if (cursor.moveToFirst()) {
@@ -1336,5 +1320,229 @@ public class DatabaseAccess {
         }
     }
 
+    public String getProductName(String product_id) {
+        String product_name = "n/a";
+        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.products + " WHERE product_id='" + product_id + "'", null);
+        if (cursor.moveToFirst()) {
+            do {
+                product_name = cursor.getString(cursor.getColumnIndex(Constant.PRODUCT_NAME));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        return product_name;
+    }
 
+    //get product weight unit name
+    public String getWeightUnitName(String weight_unit_id) {
+
+        String weight_unit_name = "n/a";
+        Cursor cursor = database.rawQuery("SELECT * FROM " + Constant.PRODUCT_WEIGHT + " WHERE weight_id=" + weight_unit_id + "", null);
+        if (cursor.moveToFirst()) {
+            do {
+                weight_unit_name = cursor.getString(1);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        return weight_unit_name;
+    }
+
+    public String getProductImage(String product_id) {
+
+        String image = "n/a";
+        Cursor cursor = database.rawQuery("SELECT * FROM products WHERE product_id='" + product_id + "'", null);
+        if (cursor.moveToFirst()) {
+            do {
+                image = cursor.getString(8);
+
+            } while (cursor.moveToNext());
+        }
+
+
+        cursor.close();
+        database.close();
+        return image;
+    }
+
+    public void createOrderListTable() {
+        /*  while compiling: INSERT INTO
+         order_list(order_status,invoice_id) VALUES (?,?,?,?,?,?,?,?,?)
+
+            */
+        open();
+        database.execSQL("DROP TABLE IF EXISTS " + Constant.orderList);
+        // creating table
+        String query = "CREATE TABLE " + Constant.orderList +
+                " ( " +
+                " invoice_id " + "Text," +
+                " order_date " + "Text," +
+                " order_time " + "Text," +
+                " order_type " + "Text," +
+                " order_payment_method " + "Text," +
+                " customer_name " + "Text," +
+                " tax " + "Text," +
+                " order_status " + "Text," +
+                " discount " + "Text" +
+                " ) ";
+        database.execSQL(query);
+        close();
+    }
+
+    //insert order in order list
+    public boolean insertOrder(String order_id, JSONObject obj) {
+        open();
+        ContentValues values = new ContentValues();
+        ContentValues values2 = new ContentValues();
+        ContentValues values3 = new ContentValues();
+
+        try {
+            String order_date = obj.getString("order_date");
+            String order_time = obj.getString("order_time");
+            String order_type = obj.getString("order_type");
+            String order_payment_method = obj.getString("order_payment_method");
+            String customer_name = obj.getString("customer_name");
+            String tax = obj.getString("tax");
+            String discount = obj.getString("discount");
+
+
+            values.put("invoice_id", order_id);
+            values.put("order_date", order_date);
+            values.put("order_time", order_time);
+            values.put("order_type", order_type);
+            values.put("order_payment_method", order_payment_method);
+            values.put("customer_name", customer_name);
+
+            values.put("tax", tax);
+            values.put("discount", discount);
+            values.put(Constant.ORDER_STATUS, Constant.PENDING);
+
+            database.insert(Constant.orderList, null, values);
+
+            database.delete("product_cart", null, null);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+
+            JSONArray result = obj.getJSONArray("lines");
+
+            for (int i = 0; i < result.length(); i++) {
+                JSONObject jo = result.getJSONObject(i);
+                String product_name = jo.getString("product_name"); //ref
+                String product_weight = jo.getString("product_weight");
+                String product_qty = jo.getString("product_qty");
+                String product_price = jo.getString("product_price");
+                String product_image = jo.getString("product_image");
+                String product_order_date = jo.getString("product_order_date");
+
+
+                String product_id = jo.getString("product_id");
+                String stock = jo.getString("stock");
+                int updated_stock = Integer.parseInt(stock) - Integer.parseInt(product_qty);
+
+
+                values2.put("invoice_id", order_id);
+                values2.put("product_name", product_name);
+                values2.put("product_weight", product_weight);
+                values2.put("product_qty", product_qty);
+                values2.put("product_price", product_price);
+                values2.put("product_image", product_image);
+                values2.put("product_order_date", product_order_date);
+                values2.put(Constant.ORDER_STATUS, Constant.PENDING);
+
+                //for stock update
+                values3.put("product_stock", updated_stock);
+
+
+                //for order insert
+                database.insert("order_details", null, values2);
+
+                //updating stock
+                database.update("products", values3, "product_id=?", new String[]{product_id});
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        database.close();
+        return true;
+    }
+
+
+    public boolean updateCartProductSubmitted(String is_submitted, String product_id) {
+        Cursor cursor1 = database.rawQuery("SELECT * FROM product_cart", null);
+        int columnIndex = cursor1.getColumnIndex("is_submitted");
+        if (columnIndex < 0) {
+            database.execSQL("ALTER TABLE product_cart ADD COLUMN " + "is_submitted" + " TEXT");
+        }
+        ContentValues values = new ContentValues();
+        values.put("is_submitted", is_submitted);
+        long check = database.update("product_cart", values, "product_id=?", new String[]{product_id});
+        database.close();
+
+        if (check == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void createProduct() {
+        open();
+        // creating table
+        database.execSQL("DROP TABLE IF EXISTS " + Constant.products);
+        String query = "CREATE TABLE " + Constant.products +
+                " ( " +
+                " product_id " + "Text," +
+                " product_name " + "Text," +
+                " product_code " + "Text," +
+                " product_category " + "Text," +
+                " product_description " + "Text," +
+                " product_buy_price " + "Text," +
+                " product_sell_price " + "Text," +
+                " product_supplier " + "Text," +
+                " product_image " + "Text," +
+                " product_stock " + "Text," +
+                " product_weight_unit_id " + "Text," +
+                " product_weight " + "Text" +
+                " ) ";
+        database.execSQL(query);
+        close();
+    }
+
+
+    public void createProductWeights() {
+        open();
+        // creating table
+        database.execSQL("DROP TABLE IF EXISTS " + Constant.product_weight);
+        String query = "CREATE TABLE " + Constant.product_weight +
+                " ( " +
+                Constant.WeightId + "Text," +
+                Constant.WeightUnitId + "Text" + ")";
+        database.execSQL(query);
+        close();
+    }
+
+    public void createCustomers() {
+        open();
+        // creating table
+        database.execSQL("DROP TABLE IF EXISTS " + Constant.customers);
+        String query = "CREATE TABLE " + Constant.customers +
+                " ( " +
+                " customer_id " + "Text," +
+                " customer_name " + "Text," +
+                " customer_cell " + "Text," +
+                " customer_email " + "Text," +
+                " customer_address " + "Text" +
+                " ) ";
+        database.execSQL(query);
+        close();
+    }
 }

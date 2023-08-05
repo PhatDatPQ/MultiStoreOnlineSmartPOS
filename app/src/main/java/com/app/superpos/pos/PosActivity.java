@@ -60,6 +60,7 @@ public class PosActivity extends BaseActivity {
     LinearLayout liner_no_products;
     SharedPreferences sp;
     String shopID, ownerId;
+    List<Category> productCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +177,6 @@ public class PosActivity extends BaseActivity {
 
 
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Category> productCategory;
                     productCategory = response.body();
 
                     if (productCategory.isEmpty()) {
@@ -242,6 +242,9 @@ public class PosActivity extends BaseActivity {
                         imgNoProduct.setVisibility(View.GONE);
                         productAdapter = new PosProductAdapter(PosActivity.this, productsList);
                         recyclerView.setAdapter(productAdapter);
+                        categoryAdapter = new ProductCategoryAdapter(PosActivity.this, productCategory, recyclerView, liner_no_products, mShimmerViewContainer);
+
+                        categoryRecyclerView.setAdapter(categoryAdapter);
                     }
 
                 }

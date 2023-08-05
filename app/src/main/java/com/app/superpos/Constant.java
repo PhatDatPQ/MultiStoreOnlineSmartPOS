@@ -194,4 +194,14 @@ public class Constant {
     public static final String SP_SHOP_CURRENCY = "shop_currency";
     public static final String Tax_No = "Tax_No";
     public static final String shop_logo = "shop_logo";
+    public static final String stock = "stock";
+    public static final String ORDER_STATUS = "order_status";
+    public static final String calculatedTotalPrice = "calculatedTotalPrice";
+    public static final String TotalPriceWithTax = "totalPriceWithTax";
+    public static final String calculatedTotal_Tax = "calculatedTotal_Tax";
+    public static final String PENDING = "Pending";
+    public static String product_weight = "product_weight";
+    public static final String WeightId = "weight_id";
+    public static final String WeightUnitId = "weight_unit_id";
+
 }
